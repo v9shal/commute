@@ -2,7 +2,7 @@ const Skill = require('../models/Skill');
 
 const addSkill = async (req, res) => {
   const { title, description } = req.body;
-  const userId = req.user._id; // Assuming req.user is set by your auth middleware
+  const userId = req.user._id; 
 
   try {
     const newSkill = new Skill({

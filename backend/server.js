@@ -25,9 +25,7 @@ app.use('/resource',resourceRoutes)
 app.use('/skill', skillRoutes);
 app.use('/profile',profileRoute)
 // Simple test route
-app.get('/hello', (req, res) => {
-  res.json({ message: "Hello, world!" });
-});
+;
 
 // Error handling middleware
 app.use((err, req, res, next) => {

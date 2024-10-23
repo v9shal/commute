@@ -33,8 +33,7 @@ export default function Home() {
     if (username) {
       navigate(`/home/profile?user=${encodeURIComponent(username)}`);
     } else {
-      // Handle the case where username is null (user not logged in)
-      navigate('/login'); // or show a message, etc.
+      navigate('/login'); 
     }
   };
 
@@ -55,14 +54,12 @@ export default function Home() {
             Commute
           </motion.h1>
 
-          {/* Container for search, search button, and user button */}
           <motion.div 
             className="flex items-center space-x-2"
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.1 }}
           >
-            {/* Search Input */}
             <input 
               type="text" 
               placeholder="Search" 
@@ -70,14 +67,12 @@ export default function Home() {
               value={searchItem} 
               onChange={(e) => setSearchItem(e.target.value)}
             />
-            {/* Search Button */}
             <button 
               onClick={handleSearch} 
               className="px-4 py-2 bg-blue-600 text-white rounded-lg shadow-md hover:bg-blue-700 transition duration-300"
             >
               Search
             </button>
-            {/* User Button */}
             <button 
               onClick={handleProfile}
               className=""
@@ -118,11 +113,16 @@ export default function Home() {
               transition={{ duration: 0.5, delay: 1 + index * 0.2 }}
             >
               <h3 className="text-2xl font-semibold mb-4 text-yellow-300">{item}</h3>
-              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+              <p>
+                {item === 'Skills' && 'Showcase your unique skills, learn new ones, and collaborate with peers to grow in your career.'}
+                {item === 'Resources' && 'Access a variety of resources shared by others or contribute your own to help the community thrive.'}
+                {item === 'Community' && 'Become part of a vibrant community that connects learners, mentors, and professionals together.'}
+              </p>
             </motion.div>
           ))}
         </div>
-        <div className="mt-8 space-x-4">
+
+        <div className="mt-12 flex justify-center space-x-6">
           <button 
             onClick={handleClick1} 
             className="px-6 py-3 bg-blue-600 text-white rounded-lg shadow-md hover:bg-blue-700 transition duration-300"
@@ -139,7 +139,7 @@ export default function Home() {
       </section>
 
       <footer className="text-center py-8">
-        <p>&copy; 2024 SkillSwap. All rights reserved.</p>
+        <p>&copy; Designed by vishal</p>
       </footer>
     </div>
   );

@@ -4,12 +4,10 @@ import axios from 'axios';
 import { motion } from 'framer-motion';
 
 interface Skill {
-
   _id: string;
   title: string;
   description: string;
-  owner: string;
-  
+  owner: string; 
 }
 
 interface Resource {
@@ -17,7 +15,6 @@ interface Resource {
   title: string;
   description: string;
   owner: string;
-  
 }
 
 export default function SearchResults() {
@@ -107,7 +104,6 @@ export default function SearchResults() {
           </button>
         </motion.div>
 
-        {/* Toggle Buttons */}
         <div className="mb-4">
           <button
             onClick={() => setShowSkills(true)}
@@ -123,13 +119,16 @@ export default function SearchResults() {
           </button>
         </div>
 
-        {/* Display Skills or Resources */}
         {showSkills ? (
           <div className="mb-10">
             <h2 className="text-2xl font-semibold mt-8 text-blue-400">Skills</h2>
             {skills.length > 0 ? (
               skills.map((skill) => (
-                <div key={skill._id} onClick={() => handleItemClick(skill.owner)} className="mt-2 p-3 bg-gray-800 border border-gray-600 rounded shadow-sm hover:shadow-md transition-shadow duration-300 cursor-pointer">
+                <div
+                  key={skill._id}
+                  onClick={() => handleItemClick(skill.owner)} // Correct user ID passed here
+                  className="mt-2 p-3 bg-gray-800 border border-gray-600 rounded shadow-sm hover:shadow-md transition-shadow duration-300 cursor-pointer"
+                >
                   <h3 className="font-semibold">{skill.title}</h3>
                   <p className="text-sm">{skill.description}</p>
                 </div>
@@ -143,7 +142,11 @@ export default function SearchResults() {
             <h2 className="text-2xl font-semibold mt-8 text-blue-400">Resources</h2>
             {resources.length > 0 ? (
               resources.map((resource) => (
-                <div key={resource._id} onClick={() => handleItemClick(resource.owner)} className="mt-2 p-3 bg-gray-800 border border-gray-600 rounded shadow-sm hover:shadow-md transition-shadow duration-300 cursor-pointer">
+                <div
+                  key={resource._id}
+                  onClick={() => handleItemClick(resource.owner)} // Correct user ID passed here
+                  className="mt-2 p-3 bg-gray-800 border border-gray-600 rounded shadow-sm hover:shadow-md transition-shadow duration-300 cursor-pointer"
+                >
                   <h3 className="font-semibold">{resource.title}</h3>
                   <p className="text-sm">{resource.description}</p>
                 </div>
