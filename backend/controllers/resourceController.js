@@ -1,51 +1,65 @@
-const Resource =require('../models/resourceModel')
+const Resource = require('../models/resourceModel');
 
-const addResource=async(req,res)=>{
-    const {title,description}=req.body;
-    const userId=req.user._id;
+const addResource = async (req, res) => {
+    const { title, description } = req.body;
+    const userId = req.user._id;
+
     try {
-        const newResource= new Resource({
-            title:title,
-            description:description,
-            owner:userId
+        const newResource = new Resource({
+            title,
+            description,
+            owner: userId
         });
+
         await newResource.save();
-        return res.status(201).json({message:"new resource has been createrd",newResource})
-
+        return res.status(201).json({ message: "New resource has been created", newResource });
     } catch (error) {
-        res.status(400).json({message:"error while creating a new Resource",error});
-
+        res.status(400).json({ message: "Error while creating a new resource", error });
     }
-}
+};
+
 const getResource = async (req, res) => {
-    const searchQuery = req.query.query;
-  
-    try {
-      const query = searchQuery
-        ? {
-            $or: [
-              { title: { $regex: searchQuery, $options: 'i' } }, 
-              { description: { $regex: searchQuery, $options: 'i' } }
-            ]
-          }
-        : {};
-  
-      const resources = await Resource.find(query);
-      return res.json(resources);
-    } catch (error) {
-      return res.status(400).json({ message: "Couldn't fetch resources", error: error.message });
-    }
-  };
-const deleteResource=async(req,res)=>{
-    const resourceId=req.params.id;
-    try {
-        await Resource.findByIdAndDelete(resourceId);
-        return res.status(200).json({message:"deleted successfully"});
-        
-    } catch (error) {
-        res.status(400).json({message:"error while deleting a resource",error});
-        
-    }
+    const searchQuery = req.query.query || '';
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const skip = (page - 1) * limit;
 
-}
-module.exports={getResource,addResource,deleteResource};
+    try {
+        const query = searchQuery
+            ? {
+                  $or: [
+                      { title: { $regex: searchQuery, $options: 'i' } },
+                      { description: { $regex: searchQuery, $options: 'i' } }
+                  ]
+              }
+            : {};
+
+        const resources = await Resource.find(query)
+            .select('title description owner createdAt updatedAt') 
+            .lean() 
+            .skip(skip) 
+            .limit(limit);
+
+        return res.json(resources);
+    } catch (error) {
+        return res.status(400).json({ message: "Couldn't fetch resources", error: error.message });
+    }
+};
+
+const deleteResource = async (req, res) => {
+    const resourceId = req.params.id;
+
+    try {
+        const result = await Resource.deleteOne({ _id: resourceId });
+        
+        if (result.deletedCount === 0) {
+            return res.status(404).json({ message: "Resource not found" });
+        }
+
+        return res.status(200).json({ message: "Deleted successfully" });
+    } catch (error) {
+        res.status(400).json({ message: "Error while deleting a resource", error });
+    }
+};
+
+module.exports = { getResource, addResource, deleteResource };
